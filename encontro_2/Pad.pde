@@ -4,6 +4,8 @@ class Pad { //
   int largura = width/30;
   int altura = height/5;
   color preenche = color(255, 0, 255);
+  
+  int placar = 0;
 
   void show() {   
     y = constrain(y, 0, height-altura);
