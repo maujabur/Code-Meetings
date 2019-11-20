@@ -1,5 +1,5 @@
 // tamanho da aresta do cubo
-float l = 25;
+float lado = 25;
 
 // valores pre calculados para inclinação das laterais
 float dx = 0.5;
@@ -51,17 +51,17 @@ void setup() {
 
 void draw() {
 
-  int line = 0;
+  int linha = 0;
   // linhas pares tem deslocamento diferente das impares no eixo X
 
-  for (float y = 0; y <= height + l * dy; y += l * dy) {
+  for (float y = 0; y <= height + lado * dy; y += lado * dy) {
     // "porcentagem" do eixo Y
     float y_norm = map(y, 0, height, 0, 1);
 
     // deslocamento nas linhas pares
-    float x_desloca = (line % 2) * l * dx * 3;
+    float x_desloca = (linha % 2) * lado * dx * 3;
 
-    for (float x = x_desloca; x <= width + l * 3; x += l * 6 * dx) {
+    for (float x = x_desloca; x <= width + lado * 3; x += lado * 6 * dx) {
       // "porcentagem" do eixo X
       float x_norm = map(x, 0, width, 0, 1);
 
@@ -89,19 +89,24 @@ void draw() {
        float espalha =  width*height/5;
       /**/
 
+      // "porcentagem" de efeito de cor "central"
       float d_norm = map(dist, 0, espalha, 1.0, 0.0);
       d_norm = constrain(d_norm, 0.0, 1.0);
 
+      // calcula as cores baseadas na posição X,Y e distancia do ponto central
       color c1 = get_color(c1tl, c1tr, c1bl, c1br, c1c, x_norm, y_norm, d_norm);
       color c2 = get_color(c2tl, c2tr, c2bl, c2br, c2c, x_norm, y_norm, d_norm);
       color c3 = get_color(c3tl, c3tr, c3bl, c3br, c3c, x_norm, y_norm, d_norm);
 
+      // desenha um cubo
       cube(x, y, c1, c2, c3);
     }
-    line++;
+    linha++;
   }
 }
 
+// calcula a cor da face considerando 
+// as cores dos vertices, do centro e as posições normalizadas
 color get_color(
   color ctl, 
   color ctr, 
@@ -119,30 +124,37 @@ color get_color(
   return lerpColor(c_, cc, d_norm);
 }
 
+// desenha um cubo de 3 faces aparentes
 void cube(float x, float y, color c1, color c2, color c3) {
   pushMatrix();  
   translate(x, y);
   noStroke();
+  
+  // face
   fill(c1);
   beginShape();
   vertex(0, 0);
-  vertex(l, 0);
-  vertex(l * dx, l * dy);
-  vertex(l * -dx, l * dy);
+  vertex(lado, 0);
+  vertex(lado * dx, lado * dy);
+  vertex(lado * -dx, lado * dy);
   endShape(CLOSE);
+  
+  // face
   fill(c2);
   beginShape();
   vertex(0, 0);
-  vertex(l, 0);
-  vertex(l * dx, -l * dy);
-  vertex(l * -dx, -l * dy);
+  vertex(lado, 0);
+  vertex(lado * dx, -lado * dy);
+  vertex(lado * -dx, -lado * dy);
   endShape(CLOSE);
+  
+  // face
   fill(c3);
   beginShape();
   vertex(0, 0);
-  vertex(l * -dx, -l * dy);
-  vertex(-l, 0);
-  vertex(l * -dx, l * dy);
+  vertex(lado * -dx, -lado * dy);
+  vertex(-lado, 0);
+  vertex(lado * -dx, lado * dy);
   endShape(CLOSE);
   popMatrix();
 }
