@@ -33,10 +33,7 @@ void setup() {
     curva[col] = val;
   }
   
-  noSmooth();
-  
-  colorMode(HSB,100);
-  
+  colorMode(HSB,100); 
 }
 
 void draw() {
@@ -51,6 +48,7 @@ void draw() {
     int hue = (int)map((float)line/2.0 + ni, 0, (float)line_qt/2.0,0,100)%100;
     caminho.stroke (hue,100,100);
     caminho.noFill();
+    caminho.strokeWeight(1.5);
 
     PShape fundo = createShape();
     fundo.beginShape();
@@ -72,8 +70,7 @@ void draw() {
     fundo.endShape();
 
     shape(fundo,0,dy*line);
-    shape(caminho,0,dy*line);
-    
+    shape(caminho,0,dy*line);    
   }
   
   ni += 0.005;
