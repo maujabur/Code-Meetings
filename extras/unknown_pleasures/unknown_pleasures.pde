@@ -21,19 +21,19 @@ void setup() {
 
   dy = h/(line_qt-1);
   dx = w/col_qt;
-  
+
   // precalcula "perfil" das linhas
   for (int col = 0; col <= col_qt; col++) {
     float c_col = (float)col_qt/2;
     float val = (col-c_col)*(col-c_col);
-   val = map(val, 0, c_col*c_col, 1.1,0);
-   val = constrain(val,0,1);
-   val = val*val*val;
-   val = val*val*val;
+    val = map(val, 0, c_col*c_col, 1.1, 0);
+    val = constrain(val, 0, 1);
+    val = val*val*val;
+    val = val*val*val;
     curva[col] = val;
   }
-  
-  colorMode(HSB,100); 
+
+  colorMode(HSB, 100);
 }
 
 void draw() {
@@ -43,35 +43,59 @@ void draw() {
 
   for (int line = 0; line < line_qt; line++) {
 
-    PShape caminho = createShape();
-    caminho.beginShape();
-    int hue = (int)map((float)line/2.0 + ni, 0, (float)line_qt/2.0,0,100)%100;
-    caminho.stroke (hue,100,100);
-    caminho.noFill();
-    caminho.strokeWeight(1.5);
+    float dados[] = calc_data((float)line / 2.0 + ni);
 
-    PShape fundo = createShape();
-    fundo.beginShape();
-    fundo.noStroke();
-    fundo.fill(0);
-    fundo.vertex(0, 0);
-    for (int col = 0; col <= col_qt; col++) {
+    pushMatrix();
+    translate(0, dy*line);
 
-      float ny = noise((float)col/2.0, (float)line/2+ni)*n_max;
+    noStroke();
+    fill(0);
+    draw_fill(dados);
 
-      float x = (float)col*dx;
-      float y = -ny*(0.1+curva[col]);
-      caminho.vertex(x, y);
-      fundo.vertex(x, y);
-    }
-    fundo.vertex(col_qt*dx, 0);
-
-    caminho.endShape();
-    fundo.endShape();
-
-    shape(fundo,0,dy*line);
-    shape(caminho,0,dy*line);    
+    int hue = (int)map((float)line/2.0 + ni, 0, (float)line_qt/2.0, 0, 100)%100;
+    stroke (hue, 100, 100);
+    noFill();
+    strokeWeight(1.5);
+    draw_lines(dados);
+    popMatrix();
   }
-  
+
   ni += 0.005;
+}
+
+float[] calc_data(float noise_y) {
+
+  float[] y_array = new float[col_qt+1];
+
+     for (int col = 0; col <= col_qt; col++) {
+
+      float ny = noise(col / 2.0 , noise_y) * n_max;
+      y_array[col] = -ny  * (0.1 + curva[col]);
+    } 
+  return y_array;
+}
+
+void draw_lines(float[] y_array) {
+
+  for (int col = 0; col < y_array.length - 1; col++) {
+
+    float x1 = dx * col;
+    float x2 = dx * (col + 1);
+    line(x1, y_array[col], x2, y_array[col + 1]);
+  }
+}
+
+void draw_fill(float[] y_array) {
+
+  beginShape();
+
+  vertex(0, 0);
+  for (int col = 0; col < y_array.length; col++) {
+
+    float x = dx * col;
+    vertex(x, y_array[col]);
+  }
+
+  vertex(col_qt * dx, 0);
+  endShape();
 }
