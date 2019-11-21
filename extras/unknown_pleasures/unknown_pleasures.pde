@@ -55,7 +55,7 @@ void draw() {
     int hue = (int)map((float)line/2.0 + ni, 0, (float)line_qt/2.0, 0, 100)%100;
     stroke (hue, 100, 100);
     noFill();
-    strokeWeight(1.5);
+    strokeWeight(1.5+ 2*float(line)/float(line_qt));
     draw_lines(dados);
     popMatrix();
   }
@@ -67,22 +67,34 @@ float[] calc_data(float noise_y) {
 
   float[] y_array = new float[col_qt+1];
 
-     for (int col = 0; col <= col_qt; col++) {
+  for (int col = 0; col <= col_qt; col++) {
 
-      float ny = noise(col / 2.0 , noise_y) * n_max;
-      y_array[col] = -ny  * (0.1 + curva[col]);
-    } 
+    float ny = noise(col / 2.0, noise_y) * n_max;
+    y_array[col] = -ny  * (0.1 + curva[col]);
+  } 
   return y_array;
 }
 
 void draw_lines(float[] y_array) {
 
-  for (int col = 0; col < y_array.length - 1; col++) {
+  //for (int col = 0; col < y_array.length - 1; col++) {
 
-    float x1 = dx * col;
-    float x2 = dx * (col + 1);
-    line(x1, y_array[col], x2, y_array[col + 1]);
+  //  float x1 = dx * col;
+  //  float x2 = dx * (col + 1);
+  //  line(x1, y_array[col], x2, y_array[col + 1]);
+  //}
+  // linhas têm problema com strokeWeight(2.5), p.ex.
+  // e apresentam pontos nas extremidades
+
+  beginShape();
+
+  for (int col = 0; col < y_array.length; col++) {
+
+    float x = dx * col;
+    vertex(x, y_array[col]);
   }
+
+  endShape();
 }
 
 void draw_fill(float[] y_array) {
