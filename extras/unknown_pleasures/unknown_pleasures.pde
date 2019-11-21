@@ -1,8 +1,7 @@
 int line_qt = 59;
 int col_qt = 41;
 
-float n_max = 8;
-// altura em "linhas"
+float n_max = 93;
 
 float w = 455;
 float h = 560;
@@ -33,6 +32,11 @@ void setup() {
    val = val*val*val;
     curva[col] = val;
   }
+  
+  noSmooth();
+  
+  colorMode(HSB,100);
+  
 }
 
 void draw() {
@@ -44,7 +48,8 @@ void draw() {
 
     PShape caminho = createShape();
     caminho.beginShape();
-    caminho.stroke (255);
+    int hue = (int)map((float)line/2.0 + ni, 0, (float)line_qt/2.0,0,100)%100;
+    caminho.stroke (hue,100,100);
     caminho.noFill();
 
     PShape fundo = createShape();
@@ -57,7 +62,7 @@ void draw() {
       float ny = noise((float)col/2.0, (float)line/2+ni)*n_max;
 
       float x = (float)col*dx;
-      float y = -ny*dy*curva[col];
+      float y = -ny*(0.1+curva[col]);
       caminho.vertex(x, y);
       fundo.vertex(x, y);
     }
