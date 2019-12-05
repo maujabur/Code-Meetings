@@ -3,8 +3,9 @@
 float largura = 12;
 float altura = largura*sin(radians(60));
 
-float tela_largura = 357;
-float tela_altura = 447;
+float tela_largura = 30*largura;
+float tela_altura = 43*altura;
+
 void setup() {
   size(500, 500);
 }
@@ -14,13 +15,13 @@ void draw() {
   fill (0);
   noStroke();
   translate(width/2, height/2);
-  
+
   desenha_plano();
-  
-   translate(0.5*largura, 1.0*altura);
- 
+
+  translate(0.5*largura, 1.0*altura);
+
   rotate(millis()/5000F);
-  
+
   desenha_plano();
 }
 
@@ -38,9 +39,9 @@ void desenha_plano() {
   }
 }
 
-void desenha_triangulo(float x,float y) {
+void desenha_triangulo(float x, float y) {
   pushMatrix();
-  translate(x,y);
+  translate(x, y);
   triangle(-largura/2, -altura/2, 0, altura/2, largura/2, -altura/2);
   popMatrix();
 }
