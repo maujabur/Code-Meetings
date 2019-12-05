@@ -1,6 +1,6 @@
 ArrayList<PVector> points = new ArrayList<PVector>();
 
-float seg_limit = 10; // aprox pixels por segmento
+float seg_limit = 20; // aprox pixels por segmento
 
 float seg_limit_sq = seg_limit*seg_limit;
 

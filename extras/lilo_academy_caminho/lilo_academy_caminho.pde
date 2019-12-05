@@ -13,6 +13,19 @@ color linhas_fim = color (210, 163, 169);
 
 int qt_linhas = 17;
 
+int qt_points = 9;
+float first_points[][] = {
+  {-0.206, 0.652}, 
+  {0.112, 0.753}, 
+  {0.263, 0.534}, 
+  {0.207, 0.290}, 
+  {0.472, 0.560}, 
+  {0.779, 0.422}, 
+  {0.846, 0.812}, 
+  {0.999, 0.530}, 
+  {0.893, 0.000}, 
+};
+
 float seg_limit_sq = seg_limit*seg_limit;
 
 
@@ -20,6 +33,7 @@ ArrayList<PVector> points = new ArrayList<PVector>();
 
 void setup() {
   fullScreen();
+  init_points();
 }
 
 void draw() {
@@ -50,7 +64,7 @@ void draw() {
   noise_space =   100;
   translate (-20, 60);
   fill(168, 85, 177);
-  draw_splash(reduced, 60,120, 1, 8);
+  draw_splash(reduced, 60, 120, 1, 8);
 
   noise_space = 200;
   translate (-20, 60);
@@ -62,6 +76,8 @@ void draw() {
 
 void mousePressed() {
   points.add(new PVector(mouseX, mouseY));
+
+  println("{"+nfc(float(mouseX)/float(width), 3)+", "+nfc(float(mouseY)/float(height), 3)+"},");
 }
 
 void keyPressed() {
@@ -69,5 +85,19 @@ void keyPressed() {
 }
 
 void mouseDragged() {
-  points.add(new PVector(mouseX, mouseY));
+  PVector mouse = new PVector(mouseX, mouseY);
+  float dist = PVector.sub(mouse, points.get(points.size()-1)).magSq();
+
+  if (dist > seg_limit_sq*9) {
+    points.add(mouse);
+  }
+}
+
+void init_points() {
+  for (int i = 0; i< qt_points; i++) {
+    points.add(new PVector(first_points[i][0]*width,first_points[i][1]*height));
+  }
+  
+  println(points.size());
+  
 }
