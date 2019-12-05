@@ -6,12 +6,15 @@ float noise_delta_time = 0.0003;
 float noise_space = 0;
 float noise_time = 0;
 
-float seg_limit_sq = 9;
+float seg_limit = 3;
 
 color linhas_ini = color(164, 232, 207);
 color linhas_fim = color (210, 163, 169);
 
 int qt_linhas = 17;
+
+float seg_limit_sq = seg_limit*seg_limit;
+
 
 ArrayList<PVector> points = new ArrayList<PVector>();
 
@@ -63,4 +66,8 @@ void mousePressed() {
 
 void keyPressed() {
   points  = new ArrayList<PVector>();
+}
+
+void mouseDragged() {
+  points.add(new PVector(mouseX, mouseY));
 }
