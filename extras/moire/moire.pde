@@ -1,13 +1,18 @@
 // https://www.facebook.com/groups/acm.siggraph.digital.arts.community/permalink/2619525168084378/?sfnsn=wiwshmo&d=n&vh=i
 
-float largura = 12;
-float altura = largura*sin(radians(60));
+float qt_largura = 30;
+float qt_altura = 43;
 
-float tela_largura = 30*largura;
-float tela_altura = 43*altura;
+float largura, altura, tela_largura, tela_altura;
+
 
 void setup() {
-  size(500, 500);
+  size(1000, 1000);
+  largura = width/42;
+  altura = largura*sin(radians(60));
+
+  tela_largura = qt_largura*largura;
+  tela_altura = qt_altura*altura;
 }
 
 void draw() {
@@ -18,7 +23,7 @@ void draw() {
 
   desenha_plano();
 
-  translate(0.5*largura, 1.0*altura);
+  translate(1*largura, 0*altura);
 
   rotate(millis()/5000F);
 
