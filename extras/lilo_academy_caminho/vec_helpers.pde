@@ -6,11 +6,13 @@ void pointV(ArrayList<PVector> p) {
   }
 }
 void lineV(ArrayList<PVector> p) {
+  beginShape();
   if (p.size() > 1) {
-    for (int i = 1; i<p.size(); i++) {
-      lineV(p.get(i-1), p.get(i));
+    for (int i = 0; i<p.size(); i++) {
+      vertex(p.get(i).x, p.get(i).y);
     }
   }
+  endShape();
 }
 
 void pointV(PVector v) {

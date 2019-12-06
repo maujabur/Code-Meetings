@@ -1,3 +1,6 @@
+import processing.svg.*;
+boolean record = false;
+
 float noise_init_x = 0;
 float noise_init_y = 1000;
 float noise_init_r = 2000;
@@ -10,6 +13,10 @@ float seg_limit = 3;
 
 color linhas_ini = color(164, 232, 207);
 color linhas_fim = color (210, 163, 169);
+
+color pingos1 = color(119, 58, 239);
+color pingos2 = color(168, 85, 177);
+color pingos3 = color(255, 108, 167);
 
 int qt_linhas = 17;
 
@@ -37,12 +44,18 @@ void setup() {
 }
 
 void draw() {
+  if (record) {
+    // Note that #### will be replaced with the frame number. Fancy!
+    beginRecord(SVG, "frame-####.svg");
+  }
+
   background (230);
 
   noise_time += noise_delta_time;
 
   ArrayList<PVector> reduced = chaikin_reduce(points, seg_limit_sq);
 
+  noFill();
   pushMatrix();
   for (int i = 0; i< qt_linhas; i++) {
     stroke(lerpColor(linhas_ini, linhas_fim, map(i, 0, qt_linhas-1, 0, 1)));
@@ -58,30 +71,47 @@ void draw() {
   noStroke();
 
   noise_space = 0;
-  fill(119, 58, 239);
+  fill(pingos1);
   draw_splash(reduced, 60, 120, 1, 10);
+  // ( pontos, espalha x, espalha y, r_minimo, r_maximo
 
   noise_space =   100;
   translate (-20, 60);
-  fill(168, 85, 177);
+  fill(pingos2);
   draw_splash(reduced, 60, 120, 1, 8);
 
   noise_space = 200;
   translate (-20, 60);
-  fill(255, 108, 167);
+  fill(pingos3);
   draw_splash(reduced, 60, 120, 2, 6);
 
   popMatrix();
-}
 
-void mousePressed() {
-  points.add(new PVector(mouseX, mouseY));
-
-  println("{"+nfc(float(mouseX)/float(width), 3)+", "+nfc(float(mouseY)/float(height), 3)+"},");
+  if (record) {
+    endRecord();
+    record = false;
+  }
 }
 
 void keyPressed() {
-  points  = new ArrayList<PVector>();
+  switch(key) {
+  case 'c':
+  case 'C':
+    points  = new ArrayList<PVector>();
+    break;
+
+  case 's':
+  case 'S':
+    record = true;
+    break;
+  }
+}
+
+void mousePressed() {
+  if (mouseButton == LEFT) {
+    points.add(new PVector(mouseX, mouseY));
+  }
+  println("{"+nfc(float(mouseX)/float(width), 3)+", "+nfc(float(mouseY)/float(height), 3)+"},");
 }
 
 void mouseDragged() {
@@ -95,9 +125,8 @@ void mouseDragged() {
 
 void init_points() {
   for (int i = 0; i< qt_points; i++) {
-    points.add(new PVector(first_points[i][0]*width,first_points[i][1]*height));
+    points.add(new PVector(first_points[i][0]*width, first_points[i][1]*height));
   }
-  
+
   println(points.size());
-  
 }
