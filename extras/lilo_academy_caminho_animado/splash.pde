@@ -2,10 +2,13 @@ void draw_splash(ArrayList<PVector> p, float r_x, float r_y, float r_min, float 
   if (p.size() > 1) {
     for (int i = 1; i<p.size(); i++) {
       pushMatrix();
+      pushStyle();
       
       translate(p.get(i-1).x, p.get(i-1).y);
       rotate(PVector.sub(p.get(i-1), p.get(i)).heading());
       splash(r_x, r_y, r_min, r_max);
+      
+      popStyle();
       popMatrix();
     }
   }
